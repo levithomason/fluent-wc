@@ -3,6 +3,7 @@ import { css, html, LitElement } from "lit";
 export class FluentMenuList extends LitElement {
   static styles = css`
     :host ul {
+      position: absolute;
       padding: 4px 4px 8px;
       margin: 0;
       width: 200px;
@@ -13,9 +14,13 @@ export class FluentMenuList extends LitElement {
     }
   `;
 
+  _handleClick(e: Event) {
+    e.stopPropagation();
+  }
+
   render() {
     console.log("menu-list render");
-    return html`<ul role="list">
+    return html`<ul role="list" @click="${this._handleClick}">
       <slot></slot>
     </ul>`;
   }
