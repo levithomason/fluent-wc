@@ -14,7 +14,6 @@ const tokens: Tokens = {
 // CSS
 //
 export const css = (strings: TemplateStringsArray, ...fns: TokenFunction[]) => {
-  console.log(strings, fns);
   return strings.reduce((acc, next, i) => {
     if (i < strings.length - 1) {
       return acc + next + fns[i](tokens);

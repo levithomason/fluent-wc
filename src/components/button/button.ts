@@ -5,6 +5,10 @@ class Button extends HTMLElement {
   _template: HTMLTemplateElement;
   _root: ShadowRoot;
 
+  static get observedAttributes() {
+    return ["appearance"];
+  }
+
   constructor() {
     super();
 
@@ -16,12 +20,22 @@ class Button extends HTMLElement {
 
     this._template.innerHTML = `
     <button class="root">
-      <slot></slot>
+      <slot id="content"></slot>
     </button>
   `;
 
     this._root.appendChild(this._style);
     this._root.appendChild(this._template.content.cloneNode(true));
+
+    const slot = this._root.querySelector("slot#content");
+    slot.addEventListener("slotchange", function (e) {
+      console.log(e);
+      let nodes = slot.assignedNodes();
+      console.log(nodes);
+      console.log(
+        `Element in Slot "${slot.name}" changed to "${nodes[0]?.outerHTML}".`
+      );
+    });
   }
 
   // Invoked each time the custom element is appended into a document-connected element.
@@ -45,6 +59,15 @@ class Button extends HTMLElement {
   // Which attributes to notice change for is specified in a static get observedAttributes method
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     console.log("attributeChangedCallback", { name, oldValue, newValue });
+    const slotElement = this._root.querySelector("slot#content");
+    console.log(slotElement);
+    console.log(slotElement.innerHTML);
+    slotElement.innerHTML = newValue;
+    console.log(slotElement.innerHTML);
+  }
+
+  render() {
+    // this._root.innerHTML = "";
   }
 }
 
